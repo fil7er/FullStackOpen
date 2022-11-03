@@ -22,7 +22,8 @@ const handleBad = () => {
     <div>
       <h2>Give Feedback</h2>
       <Buttons onClickGood={handleGood} onClickNeutral={handleNeutral} onClickBad={handleBad} />
-      <Display good={good} neutral={neutral} bad={bad}/>
+      <h2>Statistics</h2>
+      <Statistics good={good} neutral={neutral} bad={bad}/>
     </div>
   );
 }
@@ -37,12 +38,32 @@ const Buttons = (props) => {
   )
 }
 
-const Display = (props) => {
+const Statistics = (props) => {
+  if(props.good == 0 && props.neutral == 0 && props.bad == 0){
+    return (
+      <>
+        <p>No Feedback Given</p>
+      </>
+    )
+  }
+else{
   return (
     <>
-      {props.good}
-      {props.neutral}
-      {props.bad}
+      <StatisticsLine name="Good" value={props.good} />
+      <StatisticsLine name="Neutral" value={props.neutral} />
+      <StatisticsLine name="Bad" value={props.bad} />
+      <StatisticsLine name="All" value={props.good + props.neutral + props.bad} />
+      <StatisticsLine name="Average" value={(props.good + props.neutral + props.bad)/3} />
+      <StatisticsLine name="Positive" value={props.good*100/(props.good + props.neutral + props.bad)} />
+    </>
+  )}
+}
+
+
+const StatisticsLine = (props) => {
+  return (
+    <>
+      <p>{props.name}: {props.value}</p>
     </>
   )
 }
