@@ -30,7 +30,20 @@ const App = () => {
       <input type="button" onClick={handleSelected} value="next anecdotes"/>
       <input type="button" value="vote" onClick={handleVote} />
       <p>has {points[selected]} votes</p>
+      <MostVotes points={points} anecdotes={anecdotes}/>
     </div>
+  )
+}
+
+const MostVotes = (props) =>{
+  const max = Object.keys(props.points).find(key => props.points[key] === Math.max(...props.points));
+console.log(max);
+  return (
+    <>
+      <p><h2>Anecdotes with most votes</h2></p>
+      <p>{props.anecdotes[max]}</p>
+      <p>{props.points[max]} Votes</p>
+    </>
   )
 }
 
