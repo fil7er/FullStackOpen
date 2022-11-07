@@ -16,6 +16,11 @@ const Header = ({header}) => {
 }
 
 const Content = ({parts}) => {
+
+    var totalEx= [];
+    parts.map(prop => {
+        totalEx.push(prop.exercises)
+    })
     return (
         <>
             <ul>
@@ -25,7 +30,14 @@ const Content = ({parts}) => {
                     )
                 })}
             </ul>
+            <Sum total={totalEx.reduce((s, p) => {return s+p})}/>
         </>
+    )
+}
+
+const Sum = ({total}) => {
+    return (
+        <p>Total {total}</p>
     )
 }
 
