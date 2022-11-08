@@ -7,17 +7,18 @@ const App = () => {
     { name: 'Arto Hellas' }
   ]) 
 
-  const [newName, setNewName] = useState([{value: ''}])
+  const [newName, setNewName] = useState([''])
 
-  const handleNewName = () => {
-    setNewName(newName);
+  const handleNewName = (event) => {
+    setNewName(event.target.value);
   }
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    persons.push({name: newName.value})
-    console.log(newName.value)
-    setPersons(persons)
+    var copy = [... persons]
+
+    copy.push({name: newName})
+    setPersons(copy)
   }
 
   return (
@@ -25,7 +26,7 @@ const App = () => {
       <h2>Phonebook</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          name: <input value={newName.value} onChange={handleNewName} />
+          name: <input onChange={handleNewName} />
         </div>
         <div>
           <button type="submit">add</button>
