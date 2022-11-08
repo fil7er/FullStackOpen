@@ -15,10 +15,22 @@ const App = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    var copy = [... persons]
 
-    copy.push({name: newName})
-    setPersons(copy)
+    try {
+      persons.map(person => {
+        if (person.name == newName){
+          throw `${newName} is already added to phonebook`
+        }
+      })
+  
+      var copy = [... persons]
+  
+      copy.push({name: newName})
+      setPersons(copy)
+    }
+    catch(e){
+      alert(e)
+    }
   }
 
   return (
