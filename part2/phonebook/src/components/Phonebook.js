@@ -18,11 +18,9 @@ export const Phonebook = () => {
     
 
       const handleInputs = (e) => {
-        console.log(e.target.getAttribute('name'))
         var inputCopy = [...newInput];
-        inputCopy[e.target.getAttribute('data-id')][e.target.getAttribute('name')] = e.target.value
+        inputCopy[e.target.getAttribute('data-id')].value = e.target.value
         setNewInput(inputCopy)
-        console.log(newInput)
       }
     
       const handleSubmit = (event) => {

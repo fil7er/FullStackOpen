@@ -6,7 +6,7 @@ export const Form = ({handleSubmit, inputList, handleInputs}) => {
             {inputList.map(input => {
                 return(
                   <p key={inputList.id}>
-                  <Input labelName={input.labelName} handleInputs={handleInputs}/>
+                  <Input labelName={input.labelName} idData={input.id} handleInputs={handleInputs}/>
                   </p>
                 )
             })}
