@@ -1,10 +1,14 @@
-import {Input} from './Input'
+import { Input } from './Input'
 
-const Form = ({handleSubmit, inputList}) => {
+export const Form = ({handleSubmit, inputList, handleInputs}) => {
     return (
         <form onSubmit={handleSubmit}>
             {inputList.map(input => {
-                <Input labelName={input.labelName} handleFunctionName={input.handleFunctionName}/>
+                return(
+                  <p key={inputList.id}>
+                  <Input labelName={input.labelName} handleInputs={handleInputs}/>
+                  </p>
+                )
             })}
             <div>
               <button type="submit">add</button>

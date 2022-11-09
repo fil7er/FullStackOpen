@@ -1,4 +1,4 @@
-const Display = ({persons}) => {
+export const Display = ({persons}) => {
     return (
         <ul>
           {persons.map(person => {

@@ -1,7 +1,7 @@
-const Input = ({labelName, handleFunctionName}) => {
+export const Input = ({labelName, handleInputs, idData}) => {
     return (
         <>
-        {labelName}: <input onChange={handleFunctionName} />
+        {labelName}: <input name={labelName} data-id={idData} onChange={handleInputs} />
         </>
     )
 }

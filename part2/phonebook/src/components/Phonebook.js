@@ -1,6 +1,8 @@
 import { useState } from 'react'
+import { Form} from './Form'
+import { Display } from './Display'
 
-const Phonebook = ({}) => {
+export const Phonebook = () => {
 
   const [persons, setPersons] = useState([
     { name: 'Arto Hellas', number: '040-123456', id: 0 },
@@ -15,24 +17,29 @@ const Phonebook = ({}) => {
     ])
     
 
-      const handleInputs = (e, id) => {
-        inputCopy = [... newInput]
-
+      const handleInputs = (e) => {
+        console.log(e.target.getAttribute('name'))
+        var inputCopy = [...newInput];
+        inputCopy[e.target.getAttribute('data-id')][e.target.getAttribute('name')] = e.target.value
+        setNewInput(inputCopy)
+        console.log(newInput)
       }
     
       const handleSubmit = (event) => {
         event.preventDefault()
+
     
         try {
           persons.map(person => {
-            if (person.name == newName){
-              throw `${newName} is already added to phonebook`
+            if (person.name === newInput[0].value){
+              throw new Error(`${newInput[0].value} is already added to phonebook`)
             }
+            return true;
           })
       
-          var copy = [... persons]
+          var copy = [...persons]
       
-          copy.push({name: newName})
+          copy.push({name: newInput[0].value, number: newInput[1].value, id: copy.length})
           setPersons(copy)
         }
         catch(e){
@@ -43,11 +50,9 @@ const Phonebook = ({}) => {
     return (
         <>
           <h2>Phonebook</h2>
-          <Form handleSubmit={handleSubmit} inputList={newInput}/>
+          <Form handleSubmit={handleSubmit} handleInputs={handleInputs} inputList={newInput}/>
           <h2>Numbers</h2>
           <Display persons={persons}/>
         </>
       )
 }
-
-export default Phonebook
