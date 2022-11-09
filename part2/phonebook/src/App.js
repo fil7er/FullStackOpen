@@ -1,10 +1,10 @@
 import { Phonebook } from './components/Phonebook'
 
-const App = () => {
+const App = ({persons}) => {
 
   return (
     <div>
-      <Phonebook />
+      <Phonebook personsData={persons}/>
     </div>
   )
 }

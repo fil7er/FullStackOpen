@@ -2,15 +2,12 @@ import { useState } from 'react'
 import { Form} from './Form'
 import { Display } from './Display'
 import { Filter } from './Filter'
+import axios from 'axios'
 
-export const Phonebook = () => {
+export const Phonebook = ({personsData}) => {
 
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-123456', id: 0 },
-    { name: 'Ada Lovelace', number: '39-44-5323523', id: 1 },
-    { name: 'Dan Abramov', number: '12-43-234345', id: 2 },
-    { name: 'Mary Poppendieck', number: '39-23-6423122', id: 3 }
-  ]) 
+
+  const [persons, setPersons] = useState([...personsData]) 
     
       const [newInput, setNewInput] = useState([
         {labelName: 'Name', value: '', id: 0},
@@ -48,6 +45,7 @@ export const Phonebook = () => {
       
           copy.push({name: newInput[0].value, number: newInput[1].value, id: copy.length})
           setPersons(copy)
+          setPersonsFilter(copy)
         }
         catch(e){
           alert(e)
