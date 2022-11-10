@@ -1,22 +1,26 @@
 import { Flag } from "./Flag"
 import { Languages } from "./Languages"
+import { Weather } from "./Weather"
 
-export const  Display = ({countries, handleButton}) => {
+export const  Display = ({countries, handleButton, handleWeatherDetails, weatherDetails}) => {
 
     const findOne = () => {
         return(
             <>
                 {countries.map(country => {
-                return (
-                    <div key={country.id}>
-                    <h2>{country.name.common}</h2>
-                    <p>Capital: {country.capital}</p>
-                    <p>Area: {country.area}</p>
-                    <p>Languages:</p>
-                    <Languages languages={country.languages}/>
-                    <Flag flagObj={country.flags}/>
-                    </div>
-                )
+                        return (
+                            <div key={country.id}>
+                            <h2>{country.name.common}</h2>
+                            <p>Capital: {country.capital}</p>
+                            <p>Area: {country.area}</p>
+                            <p>Languages:</p>
+                            <Languages languages={country.languages}/>
+                            <Flag flagObj={country.flags}/>
+                            <Weather weatherArray={weatherDetails} countryCapitalName={country.capital}/>
+                            </div>
+                        )
+                    
+                
               })}
             </>
            )
@@ -41,7 +45,7 @@ export const  Display = ({countries, handleButton}) => {
         switch (true)
         {
             case (countries.length > 10) : throw new Error('Too many matches, specify another filter');
-            case (countries.length === 1) : return findOne();
+            case (countries.length === 1) : handleWeatherDetails(countries[0].capital); return findOne();
             default : return findDefault();
         }
        

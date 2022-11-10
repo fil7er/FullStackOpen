@@ -1,6 +1,7 @@
 import { Display } from "./Display"
 import { Filter } from "./Filter"
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { getWeater } from "../requests/Requests"
 
 export const Countries = ({countries}) => {
 
@@ -16,10 +17,21 @@ export const Countries = ({countries}) => {
         setCountryFilter(countriesCopy)
     }
 
+    const [weatherDetails, setWeatherDetails] = useState([''])
+
+    const HandleWeatherDetails = (value) => {  
+        useEffect(() => {
+            getWeater(value).then((result) => {
+                console.log(result)
+                setWeatherDetails(result)
+            })
+        }, [])
+    }
+
     return (
     <>
     <Filter handleFilter={handleFilter}/>
-    <Display countries={countryFilter} handleButton={handleButton}/>
+    <Display countries={countryFilter} handleButton={handleButton} weatherDetails={weatherDetails} handleWeatherDetails={HandleWeatherDetails}/>
     </>
     )
 
