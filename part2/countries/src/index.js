@@ -1,9 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import axios from 'axios'
 import App from './App'
+import {getCountries} from './requests/Requests'
 
-axios.get('https://restcountries.com/v3.1/all').then(response => {
-  const countries = response.data
-  ReactDOM.createRoot(document.getElementById('root')).render(<App countries={countries} />)
-})
+
+getCountries().then((result) => ReactDOM.createRoot(document.getElementById('root')).render(<App countries={result} />)).catch(err => {throw err;})

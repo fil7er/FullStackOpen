@@ -11,10 +11,15 @@ export const Countries = ({countries}) => {
         setCountryFilter(countriesCopy)
     }
 
+    const handleButton = (e) => {
+        var countriesCopy = countries.filter(country => country.name.common.toLowerCase().includes(e.target.getAttribute('name').toLowerCase()))
+        setCountryFilter(countriesCopy)
+    }
+
     return (
     <>
     <Filter handleFilter={handleFilter}/>
-    <Display countries={countryFilter}/>
+    <Display countries={countryFilter} handleButton={handleButton}/>
     </>
     )
 
