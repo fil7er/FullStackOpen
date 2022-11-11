@@ -1,7 +1,7 @@
 import { Display } from "./Display"
 import { Filter } from "./Filter"
 import { useState, useEffect } from 'react'
-import { getWeater } from "../requests/Requests"
+import { getWeather } from "../requests/Requests"
 
 export const Countries = ({countries}) => {
 
@@ -17,11 +17,11 @@ export const Countries = ({countries}) => {
         setCountryFilter(countriesCopy)
     }
 
-    const [weatherDetails, setWeatherDetails] = useState([''])
+    const [weatherDetails, setWeatherDetails] = useState(undefined)
 
     const HandleWeatherDetails = (value) => {  
         useEffect(() => {
-            getWeater(value).then((result) => {
+            getWeather(value).then((result) => {
                 console.log(result)
                 setWeatherDetails(result)
             })

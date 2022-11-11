@@ -16,7 +16,7 @@ export const  Display = ({countries, handleButton, handleWeatherDetails, weather
                             <p>Languages:</p>
                             <Languages languages={country.languages}/>
                             <Flag flagObj={country.flags}/>
-                            <Weather weatherArray={weatherDetails} countryCapitalName={country.capital}/>
+                            {weatherDetails == undefined ? '' : <Weather weatherArray={weatherDetails} countryCapitalName={country.capital}/>}
                             </div>
                         )
                     
