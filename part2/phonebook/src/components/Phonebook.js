@@ -1,8 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Form} from './Form'
 import { Display } from './Display'
 import { Filter } from './Filter'
-import axios from 'axios'
+import { Remove, Fetch, Create } from '../requests/Requests'
 
 export const Phonebook = ({personsData}) => {
 
@@ -19,6 +19,26 @@ export const Phonebook = ({personsData}) => {
         var inputCopy = [...newInput];
         inputCopy[e.target.getAttribute('data-id')].value = e.target.value
         setNewInput(inputCopy)
+      }
+
+      const handleDelete = (e) => {
+        try{
+          var id = e.target.getAttribute('data-id');
+          if(id === undefined) throw new Error("Contact not found!")
+          Remove(id).then((data) =>{
+            Fetch().then((response) => {
+              var copy = [...response]
+      
+          setPersons(copy)
+          setPersonsFilter(copy)
+          alert("Contact Removed!")
+          }) 
+          })
+        }
+        catch(e)
+        {
+          alert(e.message)
+        }
       }
 
 
@@ -40,12 +60,17 @@ export const Phonebook = ({personsData}) => {
             }
             return true;
           })
+
+          Create({name: newInput[0].value, number: newInput[1].value}).then(() =>{ 
+            Fetch().then((response) => {
+              var copy = [...response.data]
       
-          var copy = [...persons]
-      
-          copy.push({name: newInput[0].value, number: newInput[1].value, id: copy.length})
           setPersons(copy)
           setPersonsFilter(copy)
+          }) 
+        })
+      
+          
         }
         catch(e){
           alert(e)
@@ -59,7 +84,7 @@ export const Phonebook = ({personsData}) => {
           <h2>Add a new</h2>
           <Form handleSubmit={handleSubmit} handleInputs={handleInputs} inputList={newInput}/>
           <h2>Numbers</h2>
-          <Display persons={personsFilter}/>
+          <Display persons={personsFilter} handleDelete={handleDelete}/>
         </>
       )
 }
