@@ -1,11 +1,22 @@
+import '../css/main.css'
+
 import { useEffect, useState } from 'react'
 import { Form } from './Form'
 import { Display } from './Display'
 import { Filter } from './Filter'
-import { Remove, Fetch, Create } from '../requests/Requests'
+import { Remove, Fetch, Create, Update } from '../requests/Requests'
 import { Alter } from './Alter'
+import { Notification } from './Notification'
 
 export const Phonebook = ({ personsData }) => {
+
+const refresh = () => {
+  Fetch().then((copy) => {
+    var data = [...copy.data]
+    setPersonsFilter(data);
+    setPersons(data);
+  })
+}
 
 
   const [persons, setPersons] = useState([...personsData])
@@ -14,6 +25,17 @@ export const Phonebook = ({ personsData }) => {
     { labelName: 'Name', value: '', id: 0 },
     { labelName: 'Number', value: '', id: 1 }
   ])
+
+  const [updInput, setUpdInput] = useState({nameUpdate : "", numberUpdate : "" })
+
+  const handleUpdateInput = (e) =>{
+    var upd = {...updInput};
+    upd[e.target.name] = e.target.value;
+    setUpdInput(upd)
+  }
+
+
+  const [notific, setNotific] = useState({message: '', type: 'off'})
 
 
   const handleInputs = (e) => {
@@ -24,13 +46,16 @@ export const Phonebook = ({ personsData }) => {
 
   const handleDelete = (e) => {
     try {
-      if(window.confirm("Delete " + persons[e.target.getAttribute('data-id')].name))
+      var id = e.target.getAttribute('data-id');
+      var personSelected = {}
+      persons.filter(person => {if(person.id == id) personSelected = person})
+      if(window.confirm("Delete " + personSelected.name))
       {
         var id = e.target.getAttribute('data-id');
       if (id === undefined) throw new Error("Contact not found!")
       Remove(id).then(() => {
-        var personCopy = [...persons]
-        setPersons(personCopy)
+        refresh();
+        setNotific({message:"User Removed", type: "done"})
       })
       }
     }
@@ -40,16 +65,25 @@ export const Phonebook = ({ personsData }) => {
   }
 
   const handleUpdate = () => {
-
+    try
+    {
+      var personSelected = {}
+      if(persons.filter(person => {if(person.name === updInput.nameUpdate) {
+        personSelected = person
+        return person
+      }}).length == 0) 
+        throw new Error("User not Exist")
+      Update(personSelected.id, {name:personSelected.name, number:updInput.numberUpdate}).then(() => {
+        setNotific({message:"User Edited", type: "done"})
+        refresh();
+      })
+    }
+    catch(e)
+    {
+      setNotific({message:e.message, type: "error"})
+    }
   }
 
-  useEffect(() => {
-    Fetch().then((copy) => {
-      var data = [...copy.data]
-      console.log(data);
-      setPersonsFilter(data);
-    })
-  }, [])
 
 
   const [personsFilter, setPersonsFilter] = useState([...persons]);
@@ -73,24 +107,26 @@ export const Phonebook = ({ personsData }) => {
       })
 
       Create({ name: newInput[0].value, number: newInput[1].value }).then(() => {
-        alert(newInput[0].value + " added to List")
+        refresh();
+        setNotific({message:newInput[0].value + " added to List", type: "done"})
       })
 
 
     }
     catch (e) {
-      alert(e)
+      setNotific({message: `${newInput[0].value} is already added to phonebook`, type: "error"})
     }
   }
 
   return (
     <>
       <h2>Phonebook</h2>
+      <Notification  message={notific.message} type={notific.type}/>
       <Filter handleFilter={handleFilter} />
       <h2>Add a new</h2>
       <Form handleSubmit={handleSubmit} handleInputs={handleInputs} inputList={newInput} />
       <h2>Update Contact</h2>
-      <Alter handleUpdate={handleUpdate}/>
+      <Alter handleUpd={handleUpdate} handleInputUpd={handleUpdateInput}/>
       <h2>Numbers</h2>
       <Display persons={personsFilter} handleDelete={handleDelete} />
     </>
