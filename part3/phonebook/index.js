@@ -1,6 +1,11 @@
 const { response } = require('express');
 const express = require('express');
 const app = express();
+const bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+var port = process.env.PORT || 3000;
 
 const persons = [
     { 
@@ -36,20 +41,30 @@ app.get('/info', (req, res) => {
 });
 
 app.post('/api/persons', (req, res) => {
-    var name = req.body.name;
-    var number = req.body.number;
-    if(name === undefined || number === undefined){throw new Error("Parameter missing!"); }
-    persons.filter(person => {
-        if(person.name === name){throw new Error("Name must Unique!"); }
+    try
+    {
+        var name = req.body.name;
+        var number = req.body.number;
+        if(typeof(name) === undefined || typeof(number) === undefined)
+            throw new Error("Parameter missing!");
+        persons.filter(person => {
+            if(person.name === name)
+                throw new Error("Name must Unique!"); 
     });
 
-    res.send(persons[id]);
+        res.status(200).end();
+    }
+        catch(e)
+    {
+        res.json(["error", e.cause.toString()]);
+    }
 });
 
 app.get('/api/persons/:id', (req, res) => {
     try{
         var id = req.params.id
-        if(!persons.filter(person => person.id === id).length>0) { console.log("ss"); throw new Error("Person not Found!");}
+        if(persons.filter(person => person.id == id).length=0) 
+            throw new Error("Person not Found!");
         res.json(persons[id]);
     }
     catch(e)
@@ -59,13 +74,19 @@ app.get('/api/persons/:id', (req, res) => {
 });
 
 app.delete('/api/persons/:id', (req, res) => {
-    var id = req.params.id
-    if(!persons.filter(person => person.id === id).length>0) { console.log("ss"); throw new Error("Person not Found!");}
-
-    res.send(persons[id]);
+    try{
+        var id = req.params.id
+        if(persons.filter(person => person.id == id).length=0) 
+            throw new Error("Person not Found!");
+        res.status(200).end();
+    }
+    catch(e)
+    {
+        res.status(404).end();
+    }
 });
 
-app.listen(3000, () => {
-    console.log('Example app listening on port port!');
+app.listen(port, () => {
+    console.log('Example app listening on port ' + port);
 });
 
