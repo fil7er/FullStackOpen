@@ -1,9 +1,16 @@
 const { response } = require('express');
 const express = require('express');
+const morgan = require('morgan')
+
 const app = express();
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+morgan.token('response-body', (req, res) => {return JSON.stringify(req.body)});
+
+
+app.use(morgan(':method :url :status - :response-time ms :response-body'))
 
 var port = process.env.PORT || 3000;
 
