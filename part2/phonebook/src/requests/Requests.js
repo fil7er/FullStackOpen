@@ -1,10 +1,11 @@
 import axios from 'axios'
+const apiUrl = process.env.REACT_APP_API_URL;
 
 async function Fetch()
 {
     try
     {
-        return axios.get("http://localhost:3001/persons");
+        return axios.get(apiUrl+"/persons");
     }
     catch(err)
     {
@@ -16,7 +17,7 @@ async function Create(postParams)
 {
     try
     {
-        return axios.post("http://localhost:3001/persons", {name: postParams.name, number: postParams.number});
+        return axios.post(apiUrl+"/persons", {name: postParams.name, number: postParams.number});
     }
     catch(err)
     {
@@ -28,7 +29,7 @@ async function Update(id, putParams)
 {
     try
     {
-        return axios.put("http://localhost:3001/persons/"+id, {name: putParams.name, number: putParams.number});
+        return axios.put(apiUrl+"/persons/"+id, {name: putParams.name, number: putParams.number});
     }
     catch(err)
     {
@@ -40,7 +41,7 @@ async function Remove(id)
 {
     try
     {
-        return axios.delete("http://localhost:3001/persons/"+id);
+        return axios.delete(apiUrl+"/persons/"+id);
     }
     catch(err)
     {
