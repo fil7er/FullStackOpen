@@ -1,0 +1,21 @@
+{
+    "remote.portsAttributes": {
+
+        "443": {
+            "protocol": "https",
+            "public": true
+        },
+        "8443": {
+            "protocol": "https",
+            "public": true
+        },
+        "3000": {
+            "protocol": "https",
+            "public": true
+        },
+        "3001": {
+            "protocol": "https",
+            "public": true
+        },
+    }
+}

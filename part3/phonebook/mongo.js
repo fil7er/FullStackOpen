@@ -19,7 +19,7 @@ const connect = async() => {return mongoose.connect(url, { useUnifiedTopology: t
 const getAll = async() => {
     try
     {
-        var db = await connect();
+        await connect();
         var result = await Persons.find({});
         return result;
         
@@ -37,7 +37,7 @@ const getAll = async() => {
 const get = async(id) => {
     try
     {
-        var db = await connect();
+        await connect();
         var result = await Persons.findOne({_id: id});
         return result;
     }
@@ -54,7 +54,7 @@ const get = async(id) => {
 const remove = async(name) => {
     try
     {
-        var db = await connect();
+        await connect();
         var result = await Persons.deleteOne({
             name: name
         });
@@ -73,7 +73,7 @@ const remove = async(name) => {
 const add = async(name, number) => {
     try
     {
-        var db = await connect();
+        await connect();
         var person = new Persons({name: name, number: number});
         var result = await person.save();
         return result;

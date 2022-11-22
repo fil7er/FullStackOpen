@@ -1,9 +1,11 @@
 const { response } = require('express');
 const express = require('express');
 const morgan = require('morgan')
+const cors = require('cors')
 
 const app = express();
 const bodyParser = require('body-parser');
+app.use(cors())
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
@@ -23,9 +25,11 @@ app.get('/api/persons/', (req, res) => {
     })
 });
 
-app.get('/info', (req, res) => {
+app.get('/info', async(req, res) => {
+    var get = await getAll();
+    var count = get.length;
     var today = new Date(Date.now());
-    var response = "Phonebook has info for " + persons.length + " people<br>" + today.toDateString()
+    var response = "Phonebook has info for " + count + " people<br>" + today.toDateString()
     res.send(response);
 });
 
@@ -63,15 +67,15 @@ app.get('/api/persons/:id', async(req, res) => {
 });
 
 app.delete('/api/persons/:id', (req, res) => {
-    try{
-        var id = req.params.id
-        if(persons.filter(person => person.id == id).length=0) 
-            throw new Error("Person not Found!");
-        res.status(200).end();
+    try
+    {
+        var id = req.params.id;
+        var result = remove(id);
+        res.json(result);
     }
     catch(e)
     {
-        res.status(404).end();
+        res.status(404).json({Error: e.message});
     }
 });
 
