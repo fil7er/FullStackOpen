@@ -1,4 +1,4 @@
-require('dotenv').config()
+require('dotenv').config({ path: './.env.local' })
 
 const PORT = process.env.PORT
 const MONGO_URL = process.env.MONGO_URL

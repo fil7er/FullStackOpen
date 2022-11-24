@@ -1,15 +1,18 @@
 const mongoose = require('mongoose')
 const config = require('./config')
-const {Blog} = require('../schema/blogSchema')
+const Blog = require('../schema/blogSchema')
+const logger = require('./logger')
 
 const mongoUrl = config.MONGO_URL
 const mongoUser = config.MONGO_USERNAME
 const mongoPassword = config.MONGO_PASSWORD
 
-const mongoUrlWithCredentials = `mongodb://${mongoUser}:${mongoPassword}@${mongoUrl}`
+const mongoUrlWithCredentials = `mongodb+srv://${mongoUser}:${mongoPassword}@${mongoUrl}/?retryWrites=true&w=majority`
 
 const connectToMongo = async() => {
-    return mongoose.connect(mongoUrlWithCredentials, { useNewUrlParser: true, useUnifiedTopology: true })
+    return mongoose.connect(mongoUrlWithCredentials, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
+        logger.info('connected to MongoDB')
+    })
 }
 
 const getAllBlogs = async() => {
@@ -49,7 +52,7 @@ const createBlog = async(blog) => {
         return savedBlog.toJSON()
     }
     catch (error) {
-        throw new Error('Error creating blog:', error.message)
+        throw error
     }
     finally {
         mongoose.connection.close()

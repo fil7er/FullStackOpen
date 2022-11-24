@@ -1,16 +1,22 @@
-const config = require('./util/config')
 const express = require('express')
 const app = express()
 const cors = require('cors')
+const config = require('./util/config')
 const bodyParser = require('body-parser')
-const blogRouter = require('./routes/blogApi')
-const mongoose = require('mongoose')
-const logger = require('./util/logger')
+const blogRouter = require('./controllers/blogController')
 const middleware = require('./util/middleware')
+const logger = require('./util/logger')
+const mongoose = require('mongoose')
 
-logger.info('connecting to', config.MONGODB_URI)
+const mongoUrl = config.MONGO_URL
+const mongoUser = config.MONGO_USERNAME
+const mongoPassword = config.MONGO_PASSWORD
 
-mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
+const mongoUrlWithCredentials = `mongodb+srv://${mongoUser}:${mongoPassword}@${mongoUrl}/?retryWrites=true&w=majority`
+
+logger.info('connecting to', mongoUrl)
+
+mongoose.connect(mongoUrlWithCredentials, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
         logger.info('connected to MongoDB')
     })
@@ -20,7 +26,8 @@ mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology
 
 app.use(cors())
 app.use(express.static('build'))
-app.use(bodyParser.json())
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(middleware.requestLogger)
 
 app.use('/api/blogs', blogRouter)
