@@ -7,6 +7,8 @@ const getTokenFrom = request => {
     if(authorization && authorization.toLowerCase().startsWith('bearer ')) {
         return authorization.substring(7);
     }
+    return null;
+}
 
 const findAllUsers = async (request, response, next) => {
     try {

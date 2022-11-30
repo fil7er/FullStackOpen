@@ -30,6 +30,7 @@ app.use(express.static('build'))
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(middleware.requestLogger)
+app.use(middleware.tokenExtractor)
 
 app.use('/api/blogs', blogRouter)
 
