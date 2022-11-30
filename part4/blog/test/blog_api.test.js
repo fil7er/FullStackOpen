@@ -75,12 +75,82 @@ test('a specific blog is within the returned blogs', async () => {
     )
 }, 100000)
 
+test('if likes is missing, default to 0', async () => {
+    const newBlog = new Blog({
+        title: "Test blog 2",
+        author: "Test",
+        url: "http://test.com"
+    })
+    await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+    const response = await api.get('/api/blogs')
+    const likes = response.body.map(r => r.likes)
+    expect(likes).toContain(0)
+}, 100000)
 
+test('if create a new blog, the number of blogs increases by one', async () => {
+    const newBlog = new Blog({
+      title: "New blog",
+      author: "Teste",
+      url: "http://teste.com",
+      likes: 5
+    })
+    await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+    const response = await api.get('/api/blogs')
+    expect(response.body).toHaveLength(initialBlogs.length + 1)
+}, 100000)
+
+
+test('if title or url is missing, return 400 Bad Request', async () => {
+    const newBlog = new Blog({
+      author: "Teste"
+    })
+    await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(400)
+}, 100000)
+
+test('if delete a blog, the number of blogs decreases by one', async () => {
+    const response = await api.get('/api/blogs')
+    const id = response.body[0].id
+    await api
+        .delete(`/api/blogs/${id}`)
+        .expect(204)
+    const response2 = await api.get('/api/blogs')
+    expect(response2.body).toHaveLength(initialBlogs.length - 1)
+}, 100000)
+
+
+test('if update a blog likes, it will return the altered value', async() =>{
+  const response = await api.get('/api/blogs')
+  const blog = response.body[0]
+  await api
+    .put(`/api/blogs/${blog.id}`)
+    .send({likes: 100})
+    .expect(200)
+  const response2 = await api.get('/api/blogs')
+  const blog2 = response2.body[0]
+  expect(blog2.likes).toBe(100)
+})
 
 beforeEach(async () => {
   await Blog.deleteMany({})
-  const blogObjects = initialBlogs.map(blog => new Blog(blog))
-  const promiseArray = blogObjects.map(blog => blog.save())
-  await Promise.all(promiseArray)
+  console.log('cleared')
+
+  initialBlogs.forEach(async blog => {
+    let blogObject = new Blog(blog)
+    await blogObject.save()
+    console.log('saved')
+  })
+  console.log('done')
 })
+
 
