@@ -35,8 +35,6 @@ jobs:
         context: .
         file: ./part4/blog/Dockerfile
         push: true
-        tags: fullstack-blog-back:pt-04
-        cache-from: type=registry,ref=fullstack-blog-back:pt-04
-        cache-to: type=inline
+        tags: ghcr.io/fil7er/fullstack-blog-back:pt-04
 
 
