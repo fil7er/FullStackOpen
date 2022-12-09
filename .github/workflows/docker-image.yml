@@ -32,6 +32,8 @@ jobs:
       if: steps.docker_build.outcome == 'success' && steps.docker_login.outcome == 'success'
       uses: docker/build-push-action@v2
       with:
+        context: .
+        file: ./part4/blog/Dockerfile
         push: true
         tags: ${{ secrets.DOCKER_USERNAME }}/fullstack-blog-back:pt-04
       
