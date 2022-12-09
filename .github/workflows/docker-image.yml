@@ -37,6 +37,6 @@ jobs:
         context: .
         file: ./part4/blog/Dockerfile
         push: true
-        tags: ghcr.io/${{ github.repository_name }}/fullstack-blog-back:${{ github.sha }}
+        tags: ghcr.io/${{ github.repository }}/fullstack-blog-back:${{ github.sha }}
 
 
