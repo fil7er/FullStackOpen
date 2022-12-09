@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { loginUrl } from '../utils/config'
+import { loginUrl } from '../util/config'
 
 const baseUrl = loginUrl+'/api/login'
 

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { blogUrl } from '../utils/config'
+import { blogUrl } from '../util/config'
 
 const baseUrl = blogUrl+'/api/blogs'
 
