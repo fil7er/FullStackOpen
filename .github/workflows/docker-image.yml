@@ -30,9 +30,6 @@ jobs:
         username: ${{ github.repository_owner }}
         password: ${{ secrets.FULLSTACKOPEN_TOKEN }}
 
-    - name: Downcase Repository Name
-      run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
-
     - name: Deploy to GitHub Container Registry
       if: steps.docker_build.outcome == 'success' && steps.docker_login.outcome == 'success'
       uses: docker/build-push-action@v2
@@ -40,6 +37,6 @@ jobs:
         context: .
         file: ./part4/blog/Dockerfile
         push: true
-        tags: ghcr.io/${REPO}/fullstack-blog-back:${{ github.sha }}
+        tags: ghcr.io/${{ github.repository_owner }}/fullstack-blog-back:${{ github.sha }}
 
 
