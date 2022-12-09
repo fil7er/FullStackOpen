@@ -1,4 +1,4 @@
-name: Docker Image CI Handler For FullStackOpen
+name: CI Handler For FullStackOpen Part 04 Blog-Backend
 
 on:
   push:
@@ -29,6 +29,7 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Push the Docker image to DockerHub
+      id: docker_push
       if: steps.docker_build.outcome == 'success' && steps.docker_login.outcome == 'success'
       uses: docker/build-push-action@v2
       with:
@@ -36,6 +37,23 @@ jobs:
         file: ./part4/blog/Dockerfile
         push: true
         tags: ${{ secrets.DOCKER_USERNAME }}/fullstack-blog-back:pt-04
+
+    - name: Login to Heroku
+      id: heroku_login
+      uses: akhileshns/heroku-deploy@v3.12.12
+      if: steps.docker_push.outcome == 'success'
+      with:
+        heroku_email: ${{ secrets.HEROKU_EMAIL }}
+        heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+        heroku_app_name: pt04-blog-back 
+        justlogin: true
+
+    - name: Deploy to Heroku
+      if: steps.heroku_login.outcome == 'success'
+      run: |
+        heroku container:login
+        heroku container:push web --app pt04-blog-back
+        heroku container:release web --app pt04-blog-back
       
 
 
