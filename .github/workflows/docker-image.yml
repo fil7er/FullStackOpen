@@ -50,7 +50,9 @@ jobs:
 
     - name: Deploy to Heroku
       if: steps.heroku_login.outcome == 'success'
+      working-directory: part4/blog
       run: |
+        docker ps
         heroku container:login
         heroku container:push web --app pt04-blog-back
         heroku container:release web --app pt04-blog-back
