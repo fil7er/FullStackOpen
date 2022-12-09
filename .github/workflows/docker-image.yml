@@ -14,5 +14,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag fullstack-blog-back:$(date +%s)
+    - name: Build the Docker image for Part 04 Blog-Backend
+      run: docker build . --file Dockerfile --tag fullstack-blog-back:pt-04
+      working-directory: ../part4/blog-backend
+
+
