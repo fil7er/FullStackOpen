@@ -18,4 +18,14 @@ jobs:
       run: docker build . --file Dockerfile --tag fullstack-blog-back:pt-04
       working-directory: part4/blog
 
+    - name: Deploy the Docker image to GitHub Container Registry
+      if: steps.build.outcome == 'success'
+      uses: docker/build-push-action@v2
+      with:
+        context: part4/blog
+        file: ./Dockerfile
+        push: true
+        tags: ghcr.io/username/fullstack-blog-back:pt-04
+        
+
 
