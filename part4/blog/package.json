@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "cross-env NODE_ENV=test jest --verbose --runInBand --forceExit --detectOpenHandles",
-    "start": "cross-env NODE_ENV=production node index.js -p 3004",
-    "dev": "cross-env NODE_ENV=development nodemon index.js -p 3004",
+    "start": "cross-env NODE_ENV=production node index.js -p 3003",
+    "dev": "cross-env NODE_ENV=development nodemon index.js -p 3003",
     "lint": "eslint ."
   },
   "author": "",
