@@ -4,10 +4,13 @@ require('express-async-errors')
 const cors = require('cors')
 const config = require('./util/config')
 const bodyParser = require('body-parser')
-const blogRouter = require('./controllers/blogController')
 const middleware = require('./util/middleware')
 const logger = require('./util/logger')
 const mongoose = require('mongoose')
+
+const blogRouter = require('./routers/blogRouter')
+const userRouter = require('./routers/userRouter')
+const loginRouter = require('./routers/loginRouter')
 
 const mongoUrl = config.MONGO_URL
 const mongoUser = config.MONGO_USERNAME
@@ -33,6 +36,8 @@ app.use(middleware.requestLogger)
 app.use(middleware.tokenExtractor)
 
 app.use('/api/blogs', blogRouter)
+app.use('/api/users', userRouter)
+app.use('/api/login', loginRouter)
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)

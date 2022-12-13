@@ -1,6 +1,7 @@
 const User = require('../schema/userSchema');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const userCreateValidator = require('../util/userCreateValidator');
 
 const getTokenFrom = request => {
     const authorization = request.get('authorization');
@@ -43,6 +44,8 @@ const createUser = async (request, response, next) => {
         if(!token || !decodedToken.id) {
             return response.status(401).json({error: 'token missing or invalid'});
         }
+        const errors = userCreateValidator(body);
+        if(errors.length > 0) return response.status(400).json({errors});
         const saltRounds = 10;
         const passwordHash = await bcrypt.hash(body.password, saltRounds);
         const user = new User({
